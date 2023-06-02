@@ -1,0 +1,78 @@
+@echo off
+
+setlocal enabledelayedexpansion
+
+REM 入力ファイルのパスと名前を指定してください
+
+set "input_file=path\to\input.csv"
+
+REM 出力ファイルのパスと名前を指定してください
+
+set "output_file=path\to\output.csv"
+
+REM 抽出開始行と抽出間隔を指定してください（1から始まる行番号）
+
+set "start_row=2"
+
+set "interval=2"
+
+REM 抽出するヘッダーの数を指定してください
+
+set "header_count=2"
+
+REM ヘッダーの行数を指定してください（ヘッダー行数が2行以上ある場合は増やしてください）
+
+set "header_rows=1"
+
+REM ヘッダー行数を加味した抽出開始行を計算します
+
+set /a "adjusted_start_row=start_row + header_rows"
+
+REM 抽出処理を開始します
+
+echo Extracting rows from %input_file%...
+
+echo.
+
+REM 抽出された行を一時ファイルに書き込みます
+
+(
+
+    REM 先頭行のヘッダーを出力します
+
+    for /f "usebackq skip=%adjusted_start_row% tokens=*" %%a in ("%input_file%") do (
+
+        echo %%a
+
+        REM 指定された間隔ごとに行を抽出します
+
+        for /l %%i in (1, %interval%, %header_count%) do (
+
+            set /a "next_row=adjusted_start_row + %%i"
+
+            REM 抽出された行を出力します
+
+            for /f "usebackq skip=!next_row! tokens=*" %%b in ("%input_file%") do (
+
+                echo %%b
+
+            )
+
+        )
+
+    )
+
+) > "%output_file%"
+
+REM 抽出処理が完了しました
+
+echo.
+
+echo Extraction completed. Extracted rows are saved in %output_file%.
+
+echo.
+
+echo Press any key to exit.
+
+pause > nul
+
