@@ -8,7 +8,7 @@ set /p input_file="分割したいファイル名を入力して下さい（.csv
 
 REM 出力ファイルのパスと名前を指定してください
 for %%F in ("%input_file%") do set "filename=%%~nF"
-set "output_file=%filename%_split.csv"
+set "output_file=%filename%_.csv"
 
 REM 抽出開始行と抽出間隔を指定してください（1から始まる行番号）
 
